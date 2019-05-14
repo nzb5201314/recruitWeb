@@ -9,6 +9,7 @@
  */
 package com.jk.mapper.systemapper;
 
+import com.jk.model.systemmodel.IntegralprotocolBean;
 import com.jk.model.systemmodel.MemberBean;
 import com.jk.model.systemmodel.Systemodel;
 import org.apache.ibatis.annotations.Select;
@@ -36,5 +37,14 @@ public interface SysteMapper {
     MemberBean Memberecho();
     @Update("UPDATE h_member SET closereg=#{closereg},emailregprefix=#{emailregprefix},registerpasswordopen=#{registerpasswordopen},regpasswordtpye=#{regpasswordtpye},regpasswordtpyeinput=#{regpasswordtpyeinput},regprefix=#{regprefix}")
     void undatamember(MemberBean memberBean);
+    //回显网站配置里的注册协议和积分配置模块
+    @Select("SELECT * FROM h_xieyijifen")
+    IntegralprotocolBean queryintegralprotocol();
+    //修改网站配置里的注册协议
+    @Update("UPDATE h_xieyijifen SET zhucexieyi=#{zhucexieyi}")
+    void undatazhecexieyi(IntegralprotocolBean integralprotocolBean);
+    //修改网站配置里的积分配置模块
+    @Update("UPDATE h_xieyijifen SET substitutename=#{substitutename},integralclassifier=#{integralclassifier}")
+    void undataIntegral(IntegralprotocolBean integralprotocolBean);
 }
 

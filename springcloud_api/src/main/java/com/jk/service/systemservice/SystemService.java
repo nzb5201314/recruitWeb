@@ -9,6 +9,7 @@
  */
 package com.jk.service.systemservice;
 
+import com.jk.model.systemmodel.IntegralprotocolBean;
 import com.jk.model.systemmodel.MemberBean;
 import com.jk.model.systemmodel.Systemodel;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -32,11 +33,17 @@ public interface SystemService {
     @RequestMapping(value = "/undatasystemodel",method = RequestMethod.PUT)
     void undatamenu(@RequestBody Systemodel systemodel);
     //回显网站配置里的注册设置
-    @RequestMapping(value = "/Memberecho",method = RequestMethod.PUT)
+    @RequestMapping(value = "/Memberecho",method = RequestMethod.GET)
     MemberBean Memberecho();
     //修改网站配置里的网站配置和首页底部配置模块
     @RequestMapping(value = "/undatamember",method = RequestMethod.PUT)
     void undatamember(@RequestBody MemberBean memberBean);
+    //回显网站配置里的注册协议和积分配置模块
+    @RequestMapping(value = "/queryintegralprotocol",method = RequestMethod.GET)
+    IntegralprotocolBean queryintegralprotocol();
+    //修改网站配置里的注册协议和积分配置模块
+    @RequestMapping(value = "/undataIntegral",method = RequestMethod.PUT)
+    void undataIntegral(@RequestBody IntegralprotocolBean integralprotocolBean);
 }
 
 

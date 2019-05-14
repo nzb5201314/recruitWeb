@@ -9,6 +9,7 @@
  */
 package com.jk.controller.controllersystem;
 
+import com.jk.model.systemmodel.IntegralprotocolBean;
 import com.jk.model.systemmodel.MemberBean;
 import com.jk.model.systemmodel.Systemodel;
 import com.jk.service.systemservice.SystemService;
@@ -89,6 +90,36 @@ public class SystemCon {
 
             systemService.undatamember(memberBean);
 
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /**
+     * 回显网站配置里的注册协议和积分配置模块
+     * @return
+     */
+    @RequestMapping(value = "/queryintegralprotocol")
+    @ResponseBody
+    public IntegralprotocolBean queryintegralprotocol(){
+
+        return systemService.queryintegralprotocol();
+
+    }
+
+    /**
+     * 修改网站配置里的注册协议和积分配置模块
+     * @param integralprotocolBean
+     * @return
+     */
+    @RequestMapping("undataIntegral")
+    @ResponseBody
+    public Boolean undataIntegral (IntegralprotocolBean integralprotocolBean){
+        try {
+
+            systemService.undataIntegral(integralprotocolBean);
             return true;
         } catch (Exception e) {
             e.printStackTrace();

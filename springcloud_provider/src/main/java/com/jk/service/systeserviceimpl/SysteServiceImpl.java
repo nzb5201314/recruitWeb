@@ -10,6 +10,7 @@
 package com.jk.service.systeserviceimpl;
 
 import com.jk.mapper.systemapper.SysteMapper;
+import com.jk.model.systemmodel.IntegralprotocolBean;
 import com.jk.model.systemmodel.MemberBean;
 import com.jk.model.systemmodel.Systemodel;
 import com.jk.service.systemservice.SystemService;
@@ -58,6 +59,23 @@ public class SysteServiceImpl implements SystemService {
     @Override
     public void undatamember(MemberBean memberBean) {
         systeMapper.undatamember(memberBean);
+    }
+
+    //回显网站配置里的注册协议和积分配置模块
+    @Override
+    public IntegralprotocolBean queryintegralprotocol() {
+
+        return systeMapper.queryintegralprotocol();
+    }
+
+    //修改网站配置里的注册协议和积分配置模块
+    @Override
+    public void undataIntegral(IntegralprotocolBean integralprotocolBean) {
+        if(integralprotocolBean.getZhucexieyi()!=null){
+            systeMapper.undatazhecexieyi(integralprotocolBean);
+        }else {
+            systeMapper.undataIntegral(integralprotocolBean);
+        }
     }
 }
 
