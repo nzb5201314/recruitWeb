@@ -34,7 +34,9 @@ public class ResumeWorkBean implements Serializable {
     private String jobs;
     private String achievements;
     private Integer todate;
-
+    private Integer audit;
+    private Integer addtime;
+    private Integer refreshtime;
     public Integer getId() {
         return id;
     }
@@ -123,6 +125,30 @@ public class ResumeWorkBean implements Serializable {
         this.todate = todate;
     }
 
+    public Integer getAudit() {
+        return audit;
+    }
+
+    public void setAudit(Integer audit) {
+        this.audit = audit;
+    }
+
+    public Integer getAddtime() {
+        return addtime;
+    }
+
+    public void setAddtime(Integer addtime) {
+        this.addtime = addtime;
+    }
+
+    public Integer getRefreshtime() {
+        return refreshtime;
+    }
+
+    public void setRefreshtime(Integer refreshtime) {
+        this.refreshtime = refreshtime;
+    }
+
     @Override
     public String toString() {
         return "ResumeWorkBean{" +
@@ -137,6 +163,9 @@ public class ResumeWorkBean implements Serializable {
                 ", jobs='" + jobs + '\'' +
                 ", achievements='" + achievements + '\'' +
                 ", todate=" + todate +
+                ", audit=" + audit +
+                ", addtime=" + addtime +
+                ", refreshtime=" + refreshtime +
                 '}';
     }
 }

@@ -24,8 +24,9 @@ import java.util.List;
  * @since 1.0.0
  */
 public interface ResumeWorkMapper {
+
     int findResumeWorkBeanCount(@Param("resumeWorkBean")ResumeWorkBean resumeWorkBean);
 
-    List<ResumeWorkBean> findResumeWorkBeanPage(@Param("start") int start,@Param("rows") Integer rows,@Param("resumeWorkBean") ResumeWorkBean resumeWorkBean);
+    List<ResumeWorkBean> findResumeWorkBeanPage(@Param("start") Integer start, @Param("rows")Integer rows, @Param("resumeWorkBean")ResumeWorkBean resumeWorkBean);
 }
  

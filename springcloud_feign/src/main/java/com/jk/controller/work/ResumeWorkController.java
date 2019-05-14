@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.HashMap;
 
 /**
- * 〈公司〉<br>
+ * 〈公司职位〉<br>
  * 〈work〉
  *
  * @author Administrator
@@ -33,12 +33,12 @@ public class ResumeWorkController {
     private ResumeWorkService resumeWorkService;
 
     /**
-     * 查询
+     * 职位管理查询
      * @param ResumeWorkBean
      * @param page
      * @param rows
      */
-    @RequestMapping(value = "/findResumeWorkList",method = RequestMethod.GET)
+    @RequestMapping(value = "/findResumeWorkList")
     public HashMap<String, Object> findResumeWorkList(Integer page, Integer rows, ResumeWorkBean resumeWorkBean){
         return resumeWorkService.findResumeWorkList(page,rows,resumeWorkBean);
     }
