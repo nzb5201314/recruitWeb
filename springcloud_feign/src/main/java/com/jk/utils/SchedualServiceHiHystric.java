@@ -9,7 +9,6 @@
  */
 package com.jk.utils;
 
-import com.jk.service.UserfService;
 import org.springframework.stereotype.Component;
 
 /**
@@ -21,7 +20,7 @@ import org.springframework.stereotype.Component;
  * @since 1.0.0
  */
 @Component
-public class SchedualServiceHiHystric implements UserfService {
+public class SchedualServiceHiHystric {
 
 }
 
