@@ -11,7 +11,7 @@
     </select>
 
     <!--列表查询-->
-    <select id="findGoodsPage" resultType="com.jk.model.work.ResumeWorkBean">
+    <select id="findResumeWorkBeanPage" resultType="com.jk.model.work.ResumeWorkBean">
         select a.jobs,a.companyname,b.audit audit,b.addtime addtime,b.refreshtime refreshtime from qs_resume_work a
           left join qs_resume b on a.uid=b.uid
           <include refid="ResumeWorkSql"></include>

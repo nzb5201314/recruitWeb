@@ -38,7 +38,7 @@ public class ResumeWorkController {
      * @param page
      * @param rows
      */
-    @RequestMapping(value = "/findResumeWorkList",method = RequestMethod.GET)
+    @RequestMapping(value = "/findResumeWorkList")
     public HashMap<String, Object> findResumeWorkList(Integer page, Integer rows, ResumeWorkBean resumeWorkBean){
         return resumeWorkService.findResumeWorkList(page,rows,resumeWorkBean);
     }

@@ -15,6 +15,7 @@ import com.jk.model.work.ResumeWorkBean;
 import com.jk.service.work.ResumeWorkServiceApi;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
 import java.util.List;
@@ -27,7 +28,7 @@ import java.util.List;
  * @create 2019/5/13
  * @since 1.0.0
  */
-@Service
+@RestController
 public class ResumeWorkServiceImpl implements ResumeWorkServiceApi{
     @Autowired
     private ResumeWorkMapper resumeWorkMapper;
