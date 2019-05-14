@@ -1,23 +1,25 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jk.mapper.ResumeWorkMapper">
+    <!--查询个数-->
+    <select id="findResumeWorkBeanCount" parameterType="com.jk.model.work.ResumeWorkBean" resultType="int">
+        select count(1) from qs_resume_work a
+          left join qs_resume b on a.uid=b.uid
+          <include refid="ResumeWorkSql"></include>
+    </select>
 
+    <!--列表查询-->
+    <select id="findGoodsPage" resultType="com.jk.model.work.ResumeWorkBean">
+        select a.jobs,a.companyname,b.audit audit,b.addtime addtime,b.refreshtime refreshtime from qs_resume_work a
+          left join qs_resume b on a.uid=b.uid
+          <include refid="ResumeWorkSql"></include>
+          limit #{start},#{rows}
+    </select>
 
+    <!-- 查询用户公共sql -->
+    <sql id="ResumeWorkSql">
 
-
-
-
-
-
-
-
-
-
-
-
-</body>
-</html>
+    </sql>
+</mapper>

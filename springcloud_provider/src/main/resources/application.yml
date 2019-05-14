@@ -13,9 +13,9 @@ spring:
     name: service-provider
   datasource: #mysql数据库
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/ht7?characterEncoding=utf-8
+    url: jdbc:mysql:://192.168.1.12 1/zhaopin?useUnicode=true&characterEncoding=utf-8
     username: root
-    password: ht
+    password: root
 
 mybatis: #mybatis映射文件
   mapper-locations: classpath:mapper/*.xml

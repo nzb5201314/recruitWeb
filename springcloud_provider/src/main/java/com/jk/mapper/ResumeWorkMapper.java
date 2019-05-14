@@ -11,6 +11,7 @@
 package com.jk.mapper;
 
 import com.jk.model.work.ResumeWorkBean;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -23,8 +24,9 @@ import java.util.List;
  * @since 1.0.0
  */
 public interface ResumeWorkMapper {
-    int findResumeWorkBeanCount(ResumeWorkBean resumeWorkBean);
 
-    List<ResumeWorkBean> findResumeWorkBeanPage(int start, Integer rows, ResumeWorkBean resumeWorkBean);
+    int findResumeWorkBeanCount(@Param("resumeWorkBean")ResumeWorkBean resumeWorkBean);
+
+    List<ResumeWorkBean> findResumeWorkBeanPage(@Param("start") Integer start, @Param("rows")Integer rows, @Param("resumeWorkBean")ResumeWorkBean resumeWorkBean);
 }
  

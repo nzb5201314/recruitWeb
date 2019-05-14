@@ -10,8 +10,10 @@
 package com.jk.service.work;
 
 import com.jk.model.work.ResumeWorkBean;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.HashMap;
 
@@ -25,5 +27,5 @@ import java.util.HashMap;
  */
 public interface ResumeWorkServiceApi {
     @RequestMapping(value = "/findResumeWorkList",method = RequestMethod.GET)
-    HashMap<String, Object> findResumeWorkList(Integer page, Integer rows, ResumeWorkBean resumeWorkBean);
+    HashMap<String, Object> findResumeWorkList(@RequestParam("page")Integer page, @RequestParam("rows")Integer rows, @RequestBody ResumeWorkBean resumeWorkBean);
 }
