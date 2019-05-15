@@ -16,7 +16,7 @@ package com.jk.model.personal;
  * @create 2019/5/14
  * @since 1.0.0
  */
-public class PersonalOrderBean {
+public class PersonalOrderBean extends PageBean {
 
     private Integer id;    //id
     private Double amount;   //金额

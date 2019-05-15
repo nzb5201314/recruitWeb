@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class SysteServiceImpl implements SystemService {
     @Autowired
     private SysteMapper systeMapper;
+
     //回显网站配置里的网站配置和首页底部配置模块
     @Override
     public Systemodel huixian() {
