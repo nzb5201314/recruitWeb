@@ -8,10 +8,10 @@
         <include refid="orderWhere"></include>
     </select>
     <!-- 订单表分页条查 -->
-    <select id="queryshow" resultType="com.jk.model.personal.PersonalOrderBean">
+    <select id="queryshow" resultType="com.jk.model.personal.PersonalOrderBean" parameterType="com.jk.model.personal.PersonalOrderBean">
         select o.id,o.amount,o.notes,o.oid,o.addtime,o.payment_time,o.pay_type,o.is_paid,o.order_type,o.uid,m.username from qs_order o LEFT join qs_members m on m.uid=o.uid
         <include refid="orderWhere"></include>
-        LIMIT #{start},#{rows}
+        LIMIT #{start},#{personalOrderBean.rows}
     </select>
     <!-- 订单表分页条查公共sql语句 -->
     <sql id="orderWhere">
@@ -54,7 +54,7 @@
     <!-- 个人订单管理批量修改订单状态为已取消 -->
     <update id="updatestate" parameterType="Integer">
         UPDATE qs_order set is_paid=#{is_paid} where id in
-        <foreach collection="ids" index="index" item="id" open="(" close=")" separator=",">
+        <foreach collection="array" index="index" item="id" open="(" close=")" separator=",">
             #{id}
         </foreach>
     </update>
@@ -66,10 +66,10 @@
         <include refid="resumeWhere"></include>
     </select>
     <!-- 个人简历列表条查分页 -->
-    <select id="queryresumeshow" resultType="com.jk.model.personal.ResumeBean">
+    <select id="queryresumeshow" resultType="com.jk.model.personal.ResumeBean" parameterType="com.jk.model.personal.ResumeBean">
         SELECT r.id,r.uid,r.residence,r.telephone,r.display,r.audit,r.title,r.fullname,r.photo,r.photo_img,r.photo_audit,r.addtime,r.refreshtime,r.stime,r.complete_percent,r.current from qs_resume r
         <include refid="resumeWhere"></include>
-        LIMIT #{start},#{rows}
+        LIMIT #{start},5
     </select>
     <!-- 个人简历列表条查分页公共sql语句 -->
     <sql id="resumeWhere">
@@ -133,7 +133,7 @@
     <!-- 个人简历列表批量修改审核状态为已审核 -->
     <update id="updateauditstate" parameterType="Integer">
         UPDATE qs_resume set audit=#{audit} where id in
-        <foreach collection="ids" index="index" item="id" open="(" close=")" separator=",">
+        <foreach collection="array" index="index" item="id" open="(" close=")" separator=",">
             #{id}
         </foreach>
     </update>
@@ -141,7 +141,7 @@
     <!-- 个人简历列表照片批量修改审核状态为已审核 -->
     <update id="updatephotoauditstate" parameterType="Integer">
         UPDATE qs_resume set photo_audit=#{photo_audit} where id in
-        <foreach collection="ids" index="index" item="id" open="(" close=")" separator=",">
+        <foreach collection="array" index="index" item="id" open="(" close=")" separator=",">
             #{id}
         </foreach>
     </update>
@@ -149,8 +149,122 @@
     <!-- 个人简历列表批量删除 -->
     <delete id="deleteresume" parameterType="Integer">
         delete from qs_resume where id in
-        <foreach collection="ids" index="index" item="id" open="(" close=")" separator=",">
+        <foreach collection="array" index="index" item="id" open="(" close=")" separator=",">
             #{id}
         </foreach>
     </delete>
+
+
+    <!-- 个人会员列表条查分页总条数 -->
+    <select id="querymembersshowcount" parameterType="com.jk.model.personal.MembersBean" resultType="long">
+        SELECT count(*) from qs_members m
+        <include refid="membersWhere"></include>
+    </select>
+    <!-- 个人会员列表条查分页 -->
+    <select id="querymembersshow" resultType="com.jk.model.personal.MembersBean" parameterType="com.jk.model.personal.MembersBean">
+        SELECT m.uid,m.username,m.email,m.mobile,m.reg_time,m.last_login_time from qs_members m
+        <include refid="membersWhere"></include>
+        LIMIT #{start},5
+    </select>
+    <!-- 个人会员列表条查分页公共sql语句 -->
+    <sql id="membersWhere">
+        <where>
+
+            <if test="membersBean.rtime != null and membersBean.rtime != -1">
+
+                <if test="membersBean.rtime ==1">
+                    and m.reg_time &lt;=sysdate() and m.reg_time >=adddate(sysdate(),-3)
+                </if>
+                <if test="membersBean.rtime ==2">
+                    and m.reg_time &lt;=sysdate() and m.reg_time >=adddate(sysdate(),-7)
+                </if>
+                <if test="membersBean.rtime ==3">
+                    and m.reg_time &lt;=sysdate() and m.reg_time >=adddate(sysdate(),-30)
+                </if>
+                <if test="membersBean.rtime ==4">
+                    and m.reg_time &lt;=sysdate() and m.reg_time >=adddate(sysdate(),-183)
+                </if>
+                <if test="membersBean.rtime ==5">
+                    and m.reg_time &lt;=sysdate() and m.reg_time >=adddate(sysdate(),-365)
+                </if>
+
+            </if>
+
+            <if test="membersBean.username != null and membersBean.username != ''">
+                and m.username like '%${membersBean.username}%' or m.uid like '%${membersBean.username}%' or m.email like '%${membersBean.username}%' or m.mobile like '%${membersBean.username}%'
+            </if>
+        </where>
+
+    </sql>
+    <!-- 个人会员列表新增 -->
+    <insert id="membersadd" parameterType="com.jk.model.personal.MembersBean">
+        INSERT into qs_members (username,email,mobile,reg_time,last_login_time) VALUES (#{username},#{email},#{mobile},#{reg_time},#{last_login_time})
+    </insert>
+
+
+    <!-- 个人会员列表批量删除 -->
+    <delete id="deletemembers" parameterType="Integer">
+        delete from qs_members where uid in
+        <foreach collection="array" index="index" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
+
+    <!-- 个人解绑列表条查分页总条数 -->
+    <select id="queryuntyingshowcount" parameterType="com.jk.model.personal.UntyingBean" resultType="long">
+        SELECT count(*) from x_untying u left join qs_members m on u.uid=m.uid
+        <include refid="untyingWhere"></include>
+    </select>
+    <!-- 个人解绑列表条查分页 -->
+    <select id="queryuntyingshow" resultType="com.jk.model.personal.UntyingBean" parameterType="com.jk.model.personal.UntyingBean">
+        SELECT u.untyingid,u.untyingnum,u.untyingtime,u.remarks,u.uid,m.username from x_untying u left join qs_members m on u.uid=m.uid
+        <include refid="untyingWhere"></include>
+        LIMIT #{start},5
+    </select>
+    <!-- 个人解绑列表条查分页公共sql语句 -->
+    <sql id="untyingWhere">
+        <where>
+
+            <if test="untyingBean.untytime != null and untyingBean.untytime != -1">
+
+                <if test="untyingBean.untytime ==1">
+                    and u.untyingtime &lt;=sysdate() and u.untyingtime >=adddate(sysdate(),-3)
+                </if>
+                <if test="untyingBean.untytime ==2">
+                    and u.untyingtime &lt;=sysdate() and u.untyingtime >=adddate(sysdate(),-7)
+                </if>
+                <if test="untyingBean.untytime ==3">
+                    and u.untyingtime &lt;=sysdate() and u.untyingtime >=adddate(sysdate(),-30)
+                </if>
+                <if test="untyingBean.untytime ==4">
+                    and u.untyingtime &lt;=sysdate() and u.untyingtime >=adddate(sysdate(),-183)
+                </if>
+                <if test="untyingBean.untytime ==5">
+                    and u.untyingtime &lt;=sysdate() and u.untyingtime >=adddate(sysdate(),-365)
+                </if>
+
+            </if>
+
+            <if test="untyingBean.username != null and untyingBean.username != ''">
+                and m.username like '%${untyingBean.username}%' or u.uid like '%${untyingBean.username}%' or u.untyingnum like '%${untyingBean.username}%'
+            </if>
+        </where>
+
+    </sql>
+
+    <!-- 个人解绑列表备注修改 -->
+    <update id="untyingupdate" parameterType="com.jk.model.personal.UntyingBean">
+        UPDATE x_untying set remarks=#{remarks} where untyingid=#{untyingid}
+    </update>
+
+
+    <!-- 个人解绑列表批量删除 -->
+    <delete id="deleteuntying" parameterType="Integer">
+        delete from x_untying where untyingid in
+        <foreach collection="array" index="index" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
 </mapper>

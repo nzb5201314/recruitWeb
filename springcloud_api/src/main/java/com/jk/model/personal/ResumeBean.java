@@ -16,7 +16,7 @@ package com.jk.model.personal;
  * @create 2019/5/14
  * @since 1.0.0
  */
-public class ResumeBean {
+public class ResumeBean extends PageBean{
     private Integer id; //简历id
     private Integer display; //是否展示
     private Integer audit;  //审查状态
