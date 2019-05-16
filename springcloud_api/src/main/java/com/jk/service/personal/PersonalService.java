@@ -48,4 +48,16 @@ public interface PersonalService {
     //个人解绑列表批量删除
     @RequestMapping(value = "/deleteuntying")
     void deleteuntying(@RequestParam(value = "ids")Integer[] ids);
+    //个人简历照片列表条查分页
+    @RequestMapping(value = "/queryresumephotoshow")
+    HashMap<String, Object> queryresumephotoshow(@RequestBody ResumeBean resumeBean);
+    //个人解绑列表备注回显
+    @RequestMapping(value = "/untyinghuixian")
+    UntyingBean untyinghuixian(@RequestParam(value = "untyingid")Integer untyingid);
+    //个人附件列表条查分页
+    @RequestMapping(value = "/queryfujianshow")
+    HashMap<String, Object> queryfujianshow(@RequestBody ResumeBean resumeBean);
+    //个人附件列表批量修改审核状态为已审核
+    @RequestMapping(value = "/updatefujianstate")
+    void updatefujianstate(@RequestParam(value = "ids")Integer[] ids);
 }

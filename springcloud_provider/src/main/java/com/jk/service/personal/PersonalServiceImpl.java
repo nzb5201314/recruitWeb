@@ -138,6 +138,44 @@ public class PersonalServiceImpl implements PersonalService {
         personalMapper.deleteuntying(ids);
     }
 
+    //个人简历照片列表条查分页
+    @Override
+    @RequestMapping(value = "/queryresumephotoshow")
+    public HashMap<String, Object> queryresumephotoshow(ResumeBean resumeBean) {
+        long count =personalMapper.queryresumephotoshowcount(resumeBean);
+        int start=(1-1)*5;
+        List<PersonalOrderBean> list=personalMapper.queryresumephotoshow(start,resumeBean);
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("total", count);
+        hashMap.put("rows", list);
+        return hashMap;
+    }
+    //个人解绑列表备注回显
+    @Override
+    @RequestMapping(value = "/untyinghuixian")
+    public UntyingBean untyinghuixian(Integer untyingid) {
+        return personalMapper.untyinghuixian(untyingid);
+    }
+    //个人附件列表条查分页
+    @Override
+    @RequestMapping(value = "/queryfujianshow")
+    public HashMap<String, Object> queryfujianshow(ResumeBean resumeBean) {
+        long count =personalMapper.queryfujianshowcount(resumeBean);
+        int start=(1-1)*5;
+        List<PersonalOrderBean> list=personalMapper.queryfujianshow(start,resumeBean);
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("total", count);
+        hashMap.put("rows", list);
+        return hashMap;
+    }
+
+    //个人附件列表批量修改审核状态为已审核
+    @Override
+    @RequestMapping(value = "/updatefujianstate")
+    public void updatefujianstate(Integer[] ids) {
+        personalMapper.updatefujianstate(ids);
+    }
+
 
 }
 

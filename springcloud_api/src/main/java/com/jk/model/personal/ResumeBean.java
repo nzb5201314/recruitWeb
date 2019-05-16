@@ -17,11 +17,11 @@ package com.jk.model.personal;
  * @since 1.0.0
  */
 public class ResumeBean extends PageBean{
-    private Integer id; //简历id
+    private Integer id; //简历id  3
     private Integer display; //是否展示
     private Integer audit;  //审查状态
-    private String title;  //标题
-    private String fullname;  //全名
+    private String title;  //标题  3
+    private String fullname;  //全名  3
     private Integer photo;  //是否有照片
     private String photo_img;  //照片
     private Integer photo_audit;  //照片审查状态
@@ -31,6 +31,35 @@ public class ResumeBean extends PageBean{
     private Integer complete_percent; //简历完整百分比
     private String current; //最近刷新时间
     private Integer sort;  //排序
+
+    private String tpl; //附件简历路径  3
+    private Integer def;  //附件简历审核状态  3
+    private String comment_content; //评论内容  3
+
+
+    public String getTpl() {
+        return tpl;
+    }
+
+    public void setTpl(String tpl) {
+        this.tpl = tpl;
+    }
+
+    public Integer getDef() {
+        return def;
+    }
+
+    public void setDef(Integer def) {
+        this.def = def;
+    }
+
+    public String getComment_content() {
+        return comment_content;
+    }
+
+    public void setComment_content(String comment_content) {
+        this.comment_content = comment_content;
+    }
 
     public Integer getSort() {
         return sort;
@@ -161,6 +190,9 @@ public class ResumeBean extends PageBean{
                 ", complete_percent=" + complete_percent +
                 ", current='" + current + '\'' +
                 ", sort=" + sort +
+                ", tpl='" + tpl + '\'' +
+                ", def=" + def +
+                ", comment_content='" + comment_content + '\'' +
                 '}';
     }
 }

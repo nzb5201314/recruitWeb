@@ -53,7 +53,7 @@
 
     <!-- 个人订单管理批量修改订单状态为已取消 -->
     <update id="updatestate" parameterType="Integer">
-        UPDATE qs_order set is_paid=#{is_paid} where id in
+        UPDATE qs_order set is_paid=3 where id in
         <foreach collection="array" index="index" item="id" open="(" close=")" separator=",">
             #{id}
         </foreach>
@@ -114,7 +114,76 @@
                 and r.fullname like '%${resumeBean.fullname}%' or r.id like '%${resumeBean.fullname}%' or r.uid like '%${resumeBean.fullname}%' or r.residence like '%${resumeBean.fullname}%' or r.telephone  like '%${resumeBean.fullname}%'
             </if>
 
+                and r.photo =1
+        </where>
 
+        <if test="resumeBean.sort != null and resumeBean.sort != -1">
+
+            <if test="resumeBean.sort ==1">
+                order by r.stime desc
+            </if>
+            <if test="resumeBean.sort ==2">
+                order by r.current desc
+            </if>
+
+        </if>
+    </sql>
+
+    <!-- 个人简历照片列表条查分页总条数 -->
+    <select id="queryresumephotoshowcount" parameterType="com.jk.model.personal.ResumeBean" resultType="long">
+        SELECT count(*) from qs_resume r
+        <include refid="resumephotoWhere"></include>
+    </select>
+    <!-- 个人简历照片列表条查分页 -->
+    <select id="queryresumephotoshow" resultType="com.jk.model.personal.ResumeBean" parameterType="com.jk.model.personal.ResumeBean">
+        SELECT r.id,r.uid,r.residence,r.telephone,r.display,r.audit,r.title,r.fullname,r.photo,r.photo_img,r.photo_audit,r.addtime,r.refreshtime,r.stime,r.complete_percent,r.current from qs_resume r
+        <include refid="resumephotoWhere"></include>
+        LIMIT #{start},5
+    </select>
+    <!-- 个人简历照片列表条查分页公共sql语句 -->
+    <sql id="resumephotoWhere">
+        <where>
+            <if test="resumeBean.display != null and resumeBean.display != -1">
+                and r.display =#{resumeBean.display}
+            </if>
+            <if test="resumeBean.audit != null and resumeBean.audit != -1">
+                and r.audit =#{resumeBean.audit}
+            </if>
+            <if test="resumeBean.photo != null and resumeBean.photo != -1">
+                and r.photo =#{resumeBean.photo}
+            </if>
+            <if test="resumeBean.photo_audit != null and resumeBean.photo_audit != -1">
+                and r.photo_audit =#{resumeBean.photo_audit}
+            </if>
+            <if test="resumeBean.addtime != null and resumeBean.addtime != -1">
+
+                <if test="resumeBean.addtime ==1">
+                    and r.stime &lt;=sysdate() and r.stime >=adddate(sysdate(),-3)
+                </if>
+                <if test="resumeBean.addtime ==2">
+                    and r.stime &lt;=sysdate() and r.stime >=adddate(sysdate(),-7)
+                </if>
+                <if test="resumeBean.addtime ==3">
+                    and r.stime &lt;=sysdate() and r.stime >=adddate(sysdate(),-30)
+                </if>
+            </if>
+            <if test="resumeBean.refreshtime != null and resumeBean.refreshtime != -1">
+
+                <if test="resumeBean.refreshtime ==1">
+                    and r.current &lt;=sysdate() and r.current >=adddate(sysdate(),-3)
+                </if>
+                <if test="resumeBean.refreshtime ==2">
+                    and r.current &lt;=sysdate() and r.current >=adddate(sysdate(),-7)
+                </if>
+                <if test="resumeBean.refreshtime ==3">
+                    and r.current &lt;=sysdate() and r.current >=adddate(sysdate(),-30)
+                </if>
+            </if>
+            <if test="resumeBean.fullname != null and resumeBean.fullname != ''">
+                and r.fullname like '%${resumeBean.fullname}%' or r.id like '%${resumeBean.fullname}%' or r.uid like '%${resumeBean.fullname}%' or r.residence like '%${resumeBean.fullname}%' or r.telephone  like '%${resumeBean.fullname}%'
+            </if>
+
+            and r.photo =0
         </where>
 
         <if test="resumeBean.sort != null and resumeBean.sort != -1">
@@ -132,7 +201,7 @@
 
     <!-- 个人简历列表批量修改审核状态为已审核 -->
     <update id="updateauditstate" parameterType="Integer">
-        UPDATE qs_resume set audit=#{audit} where id in
+        UPDATE qs_resume set audit=2 where id in
         <foreach collection="array" index="index" item="id" open="(" close=")" separator=",">
             #{id}
         </foreach>
@@ -140,7 +209,7 @@
 
     <!-- 个人简历列表照片批量修改审核状态为已审核 -->
     <update id="updatephotoauditstate" parameterType="Integer">
-        UPDATE qs_resume set photo_audit=#{photo_audit} where id in
+        UPDATE qs_resume set photo_audit=2 where id in
         <foreach collection="array" index="index" item="id" open="(" close=")" separator=",">
             #{id}
         </foreach>
@@ -266,5 +335,64 @@
             #{id}
         </foreach>
     </delete>
+
+    <!-- 个人解绑列表备注回显 -->
+    <select id="untyinghuixian" parameterType="Integer" resultType="com.jk.model.personal.UntyingBean">
+        select * from  x_untying u where untyingid=#{untyingid}
+    </select>
+
+
+    <!-- 个人附件列表条查分页总条数 -->
+    <select id="queryfujianshowcount" parameterType="com.jk.model.personal.ResumeBean" resultType="long">
+        SELECT count(*) from qs_resume r
+        <include refid="fujianWhere"></include>
+
+    </select>
+    <!-- 个人附件列表条查分页 -->
+    <select id="queryfujianshow" resultType="com.jk.model.personal.ResumeBean" parameterType="com.jk.model.personal.ResumeBean">
+        SELECT r.id,r.stime,r.title,r.fullname,r.tpl,r.def,r.comment_content from qs_resume r
+        <include refid="fujianWhere"></include>
+
+        LIMIT #{start},5
+    </select>
+    <!-- 个人附件列表条查分页公共sql语句 -->
+    <sql id="fujianWhere">
+        <where>
+
+            <if test="resumeBean.def != null and resumeBean.def != -1">
+                and r.def =#{resumeBean.def}
+            </if>
+            <if test="resumeBean.addtime != null and resumeBean.addtime != -1">
+
+                <if test="resumeBean.addtime ==1">
+                    and r.stime &lt;=sysdate() and r.stime >=adddate(sysdate(),-3)
+                </if>
+                <if test="resumeBean.addtime ==2">
+                    and r.stime &lt;=sysdate() and r.stime >=adddate(sysdate(),-7)
+                </if>
+                <if test="resumeBean.addtime ==3">
+                    and r.stime &lt;=sysdate() and r.stime >=adddate(sysdate(),-30)
+                </if>
+                <if test="resumeBean.addtime ==4">
+                    and r.stime &lt;=sysdate() and r.stime >=adddate(sysdate(),-90)
+                </if>
+            </if>
+            <if test="resumeBean.title != null and resumeBean.title != ''">
+                and r.title like '%${resumeBean.title}%' or r.fullname like '%${resumeBean.title}%' or r.id like '%${resumeBean.title}%' or r.comment_content like '%${resumeBean.title}%'
+            </if>
+
+            and r.tpl is not null and r.tpl!=""
+
+        </where>
+    </sql>
+
+
+    <!-- 个人附件列表批量修改审核状态为已审核 -->
+    <update id="updatefujianstate" parameterType="Integer">
+        UPDATE qs_resume set def=2 where id in
+        <foreach collection="array" index="index" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </update>
 
 </mapper>

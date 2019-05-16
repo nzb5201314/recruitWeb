@@ -59,6 +59,13 @@ public class Personal {
 
         return personalService.queryresumeshow(resumeBean);
     }
+    //个人简历照片列表条查分页
+    @RequestMapping(value = "/queryresumephotoshow")
+    @ResponseBody
+    public HashMap<String, Object> queryresumephotoshow(ResumeBean resumeBean){
+
+        return personalService.queryresumephotoshow(resumeBean);
+    }
 
     //个人简历列表批量修改审核状态为已审核
     @RequestMapping(value = "/updateauditstate")
@@ -114,6 +121,13 @@ public class Personal {
         return personalService.queryuntyingshow(untyingBean);
     }
 
+    //个人解绑列表备注回显
+    @RequestMapping(value = "/untyinghuixian")
+    @ResponseBody
+    public UntyingBean untyinghuixian(Integer untyingid){
+        return personalService.untyinghuixian(untyingid);
+    }
+
     //个人解绑列表备注修改
     @RequestMapping(value = "/untyingupdate")
     @ResponseBody
@@ -127,6 +141,22 @@ public class Personal {
     @ResponseBody
     public void deleteuntying(Integer [] ids){
         personalService.deleteuntying(ids);
+    }
+
+
+    //个人附件列表条查分页
+    @RequestMapping(value = "/queryfujianshow")
+    @ResponseBody
+    public HashMap<String, Object> queryfujianshow(ResumeBean resumeBean){
+
+        return personalService.queryfujianshow(resumeBean);
+    }
+
+    //个人附件列表批量修改审核状态为已审核
+    @RequestMapping(value = "/updatefujianstate")
+    @ResponseBody
+    public void updatefujianstate(Integer [] ids){
+        personalService.updatefujianstate(ids);
     }
 
 }

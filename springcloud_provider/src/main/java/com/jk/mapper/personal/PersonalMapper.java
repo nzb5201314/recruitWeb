@@ -40,4 +40,16 @@ public interface PersonalMapper {
     void untyingupdate(UntyingBean untyingBean);
 
     void deleteuntying(Integer[] ids);
+
+    long queryresumephotoshowcount(@Param("resumeBean")ResumeBean resumeBean);
+
+    List<PersonalOrderBean> queryresumephotoshow(@Param("start")int start, @Param("resumeBean")ResumeBean resumeBean);
+
+    UntyingBean untyinghuixian(Integer untyingid);
+
+    long queryfujianshowcount(@Param("resumeBean")ResumeBean resumeBean);
+
+    List<PersonalOrderBean> queryfujianshow(@Param("start")int start, @Param("resumeBean")ResumeBean resumeBean);
+
+    void updatefujianstate(Integer[] ids);
 }
