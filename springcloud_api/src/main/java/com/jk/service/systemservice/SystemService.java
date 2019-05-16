@@ -63,11 +63,16 @@ public interface SystemService {
 
     //删除后端用户
     @RequestMapping(value = "/adduserrs",method = RequestMethod.DELETE)
-    String deleteuserrs(@RequestParam("id")Integer id);
-
+    String deleteuserrs(@RequestParam("id")Integer id,@RequestParam("userid")Integer userid);
     //通过前天传过来的账号获取账号的信息
     @RequestMapping(value = "/backstagelogin",method = RequestMethod.GET)
     UserrsdBean findUserInfoByAccount(@RequestParam("username")String username);
+
+    //修改最后一次登录的时间和ip地址
+    @RequestMapping(value = "/backstagelogin",method = RequestMethod.PUT)
+    void modifytime(@RequestParam("addr")String addr,@RequestParam("id") Integer id);
+
+
 }
 
 
