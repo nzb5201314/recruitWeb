@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jk.mapper.advertising.AdvertisingMapper">
+    <select id="queryAdverList" resultType="com.jk.model.liangh.advertising.AdvertBean">
+         SELECT
+   qa.id,
+	qa.title,
+	qac.categoryname,
+	qa.uid,
+	qa.starttime,
+	qa.deadline,
+	qa.show_order,
+	qa.url
+FROM
+	qs_ad qa
+LEFT JOIN qs_ad_category qac ON qa.type_id = qac.type_id
+    </select>
+</mapper>

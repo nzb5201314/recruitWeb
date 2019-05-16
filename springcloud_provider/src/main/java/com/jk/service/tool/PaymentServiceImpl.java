@@ -24,7 +24,8 @@ import java.util.List;
  * @since 1.0.0
  */
 @RestController
-public class PaymentServiceImpl implements PaymentServiceApi {
+public class PaymentServiceImpl implements PaymentServiceApi
+{
 
     @Autowired
     private PaymentMapper paymentMapper;
@@ -42,5 +43,10 @@ public class PaymentServiceImpl implements PaymentServiceApi {
     @Override
     public void updatePayment(Payment payment) {
         paymentMapper.updatePayment(payment);
+    }
+
+    @Override
+    public List<String> queryMysqlTable() {
+        return paymentMapper.queryMysqlTable();
     }
 }
