@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jk.mapper.JobMapper">
+
+    <!--职位查询个数-->
+    <select id="findJobCount" parameterType="com.jk.model.job.JobBean" resultType="int">
+        select count(1) from qs_jobs a
+        <include refid="jobSql"></include>
+    </select>
+
+    <!--职位列表查询-->
+    <select id="findJobList"  resultType="com.jk.model.job.JobBean">
+        select a.id,a.jobs_name,a.companyname,a.audit,a.addtimes,a.refreshtimes from qs_jobs a
+        <include refid="jobSql"></include>
+        limit #{start},2
+    </select>
+
+    <!-- 职位查询用户公共sql -->
+    <sql id="jobSql">
+        <where>
+
+            <if test="jobBean.status == 1">
+                  and a.status=1
+            </if>
+
+            <if test="jobBean.status == 2">
+                  and a.status=2
+            </if>
+
+
+            <if test="jobBean.jobs_name!=null and jobBean.jobs_name!=''">
+                and a.jobs_name like '%${jobBean.jobs_name}%'
+            </if>
+
+            <if test="jobBean.deadline!=null and jobBean.deadline!=-1">
+                <if test="jobBean.deadline ==1">
+                    and a.deadlines &lt;=sysdate() and a.deadlines >=adddate(sysdate(),-3)
+                </if>
+                <if test="jobBean.deadline==2">
+                    and a.deadlines &lt;=sysdate() and a.deadlines >=adddate(sysdate(),-7)
+                </if>
+                <if test="jobBean.deadline==3">
+                    and a.deadlines &lt;=sysdate() and a.deadlines >=adddate(sysdate(),-30)
+                </if>
+            </if>
+
+            <if test="jobBean.audit !=null and jobBean.audit !=1">
+                <if test="jobBean.audit == 2">
+                    and a.audit=2
+                </if>
+                <if test="jobBean.audit == 3">
+                    and a.audit=3
+                </if>
+                <if test="jobBean.audit == 4">
+                    and a.audit=4
+                </if>
+            </if>
+
+            <if test="jobBean.addtime != null and jobBean.addtime != -1">
+                <if test="jobBean.addtime==1">
+                    and a.addtimes &lt;=sysdate() and a.addtimes >=adddate(sysdate(),-3)
+                </if>
+                <if test="jobBean.addtime==2">
+                    and a.addtimes &lt;=sysdate() and a.addtimes >=adddate(sysdate(),-7)
+                </if>
+                <if test="jobBean.addtime==3">
+                    and a.addtimes &lt;=sysdate() and a.addtimes >=adddate(sysdate(),-30)
+                </if>
+            </if>
+
+            <if test="jobBean.refreshtime != null and jobBean.addtime != -1">
+                <if test="jobBean.refreshtime==1">
+                    and a.refreshtimes &lt;=sysdate() and a.refreshtimes >=adddate(sysdate(),-3)
+                </if>
+                <if test="jobBean.refreshtime==2">
+                    and a.refreshtimes &lt;=sysdate() and a.refreshtimes >=adddate(sysdate(),-7)
+                </if>
+                <if test="jobBean.refreshtime==3">
+                    and a.refreshtimes &lt;=sysdate() and a.refreshtimes >=adddate(sysdate(),-30)
+                </if>
+            </if>
+
+        </where>
+    </sql>
+
+    <!--职位删除 -->
+    <delete id="deleteJobById" parameterType="int">
+        delete from qs_jobs where id in
+        <foreach collection="array" index="index" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+
+    <!--企业查询个数-->
+    <select id="findCompanyCount" parameterType="com.jk.model.company.CompanyBean" resultType="int">
+        select count(1) from qs_company_profile n
+        <include refid="companySql"></include>
+    </select>
+
+    <!--企业列表查询-->
+    <select id="findCompanyList"  resultType="com.jk.model.company.CompanyBean">
+        SELECT n.id,n.companyname,n.company_img,n.addtimes,n.refreshtimes,n.comtifition,n.ontication,n.repsition from qs_company_profile n
+        <include refid="companySql"></include>
+        limit #{start},2
+    </select>
+
+    <!-- 企业查询用户公共sql -->
+    <sql id="companySql">
+        <where>
+            <!--微信绑定状态-->
+            <if test="companyBean.status !=1 and companyBean.status !=null">
+                <if test="companyBean.status==2">
+                    and n.status=2
+                </if>
+                <if test="companyBean.status==3">
+                    and n.status=3
+                </if>
+            </if>
+
+            <!--创建时间-->
+            <if test="companyBean.addtime != null and companyBean.addtime != -1">
+                <if test="companyBean.addtime==1">
+                    and n.addtimes &lt;=sysdate() and n.addtimes >=adddate(sysdate(),-3)
+                </if>
+                <if test="companyBean.addtime==2">
+                    and n.addtimes &lt;=sysdate() and n.addtimes >=adddate(sysdate(),-7)
+                </if>
+                <if test="companyBean.addtime==3">
+                    and n.addtimes &lt;=sysdate() and n.addtimes >=adddate(sysdate(),-30)
+                </if>
+            </if>
+
+            <!--到期时间-->
+            <if test="companyBean.deadline != null and companyBean.deadline != -1">
+                <if test="companyBean.deadline==1">
+                    and n.deadlines &lt;=sysdate() and n.deadlines >=adddate(sysdate(),-3)
+                </if>
+                <if test="companyBean.deadline==2">
+                    and n.deadlines &lt;=sysdate() and n.deadlines >=adddate(sysdate(),-7)
+                </if>
+                <if test="companyBean.deadline==3">
+                    and n.deadlines &lt;=sysdate() and n.deadlines >=adddate(sysdate(),-30)
+                </if>
+            </if>
+
+            <!--审核状态-->
+            <if test="companyBean.audit !=1 and companyBean.audit != null">
+                <if test="companyBean.audit=2">
+                    and n.audit=2
+                </if>
+                <if test="companyBean.audit=3">
+                    and n.audit=3
+                </if>
+                <if test="companyBean.audit=4">
+                    and n.audit=4
+                </if>
+                <if test="companyBean.audit=5">
+                    and n.audit=5
+                </if>
+            </if>
+
+        </where>
+    </sql>
+
+    <!--企业新增-->
+    <insert id="saveCompany" parameterType="com.jk.model.company.CompanyBean">
+        insert into qs_company_profile(companyname,short_name,audit,company_nature,trade_cn,address,scales,telephone,contents)
+	    values(companyname=#{companyname},short_name=#{short_name},audit=#{audit},company_nature=#{company_nature},trade_cn=#{trade_cn},address=#{address},scales=#{scale},telephone=#{telephone},contents=#{contents})
+    </insert>
+
+    <!--企业删除 -->
+    <delete id="deleteCompanyById" parameterType="int">
+        delete from qs_company_profile where id in
+        <foreach collection="array" index="index" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+
+    <!--会员查询个数-->
+    <select id="findMemberCount" parameterType="com.jk.model.member.MemberBean" resultType="int">
+        select count(1) from qs_members b
+        left join qs_company_profile c on b.uid=c.uid
+        <include refid="memberSql"></include>
+    </select>
+
+    <!--会员列表查询-->
+    <select id="findMemberList"  resultType="com.jk.model.member.MemberBean">
+        select b.uid,b.username,b.email,b.reg_times,b.last_login_time,b.status,b.telephone,c.companyname companyname from qs_members b
+        left join qs_company_profile c on b.uid=c.uid
+        <include refid="memberSql"></include>
+        limit #{start},2
+    </select>
+
+    <!-- 会员查询用户公共sql -->
+    <sql id="memberSql">
+        <where>
+
+            <if test="memberBean.status!=1 and memberBean.status!=null">
+                <if test="memberBean.status==2">
+                    and b.status=2
+                </if>
+                <if test="memberBean.status==3">
+                    and b.status=3
+                </if>
+            </if>
+
+            <if test="memberBean.reg_time!=null and memberBean.reg_time!=-1">
+                <if test="memberBean.reg_time==1">
+                    and b.reg_times &lt;=sysdate() and b.addtimes >=adddate(sysdate(),-3)
+                </if>
+                <if test="memberBean.reg_time==2">
+                    and b.reg_times &lt;=sysdate() and b.reg_times >=adddate(sysdate(),-7)
+                </if>
+                <if test="memberBean.reg_time==3">
+                    and b.reg_times &lt;=sysdate() and b.reg_times >=adddate(sysdate(),-30)
+                </if>
+                <if test="memberBean.reg_time==4">
+                    and b.reg_times &lt;=sysdate() and b.reg_times >=adddate(sysdate(),-183)
+                </if>
+                <if test="memberBean.reg_time==5">
+                    and b.reg_times &lt;=sysdate() and b.reg_times >=adddate(sysdate(),-365)
+                </if>
+            </if>
+
+        </where>
+    </sql>
+
+    <!--会员新增-->
+    <insert id="saveMember" parameterType="com.jk.model.member.MemberBean">
+        insert into qs_members(username,email,reg_times,last_login_time,status,telephone)
+	    values(username=#{username},email=#{email},reg_times=#{reg_times},last_login_time=#{last_login_time},status=#{status},telephone=#{telephone})
+    </insert>
+
+    <!--会员删除-->
+    <delete id="deleteMemberById" parameterType="int">
+        <foreach collection="array" index="index" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+
+</mapper>
