@@ -32,4 +32,7 @@ public interface PaymentMapper {
 
     @Update("UPDATE qs_payment SET t.listorder=#{listorder},t.typename=#{typename},t.byname=#{byname},t.p_introduction=#{p_introduction},t.notes=#{notes},t.partnerid=#{partnerid},t.ytauthkey=#{ytauthkey},t.fee=#{fee},t.parameter1=#{parameter1},t.parameter2=#{parameter2},t.parameter3=#{parameter3},t.p_install=#{p_install}")
     void updatePayment(Payment payment);
+
+    @Select("show tables")
+    List<String> queryMysqlTable();
 }
