@@ -34,4 +34,7 @@ public interface PaymentServiceApi {
 
     @RequestMapping("undatasystemodel")
     void updatePayment(@RequestBody Payment payment);
+
+    @RequestMapping(value = "/queryMysqlTable")
+    List<String> queryMysqlTable();
 }

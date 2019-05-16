@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jk.mapper.explain.ExplaMapper">
+     <select id="queryExpList" resultType="com.jk.model.liangh.explain.ExplainBean">
+                      SELECT
+        qe.id,
+        qe.type_id,
+        qe.content,
+            qe.title,
+        qec.categoryname,
+            qe.is_display,
+            qe.click,
+            qe.addtime
+
+        FROM
+            qs_explain qe
+        LEFT JOIN qs_explain_category qec ON qe.type_id = qec.id
+     </select>
+
+
+</mapper>

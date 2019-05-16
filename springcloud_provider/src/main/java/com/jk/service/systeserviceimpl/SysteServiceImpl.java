@@ -128,17 +128,30 @@ public class SysteServiceImpl implements SystemService {
     }
 
     @Override
-    public String deleteuserrs(Integer id) {
-        //查询权限
-       systeMapper.queryroleid(id);
+    public String deleteuserrs(Integer id,Integer userid) {
+        //查询自己的权限
+       Integer roleid=systeMapper.queryroleid(userid);
+        //查询别人的权限
+        Integer othersroleid=systeMapper.queryroleidothe(id);
 
-        return null;
+       if (roleid<othersroleid) {
+           //删除用户
+           systeMapper.deleteuserrs(id);
+           return "删除成功";
+       }else {
+           return "对不起您没有权限";
+       }
     }
 
     //通过前天传过来的账号获取账号的信息
     @Override
     public UserrsdBean findUserInfoByAccount(String username) {
         return systeMapper.findUserInfoByAccount(username);
+    }
+    //修改最后一次登录的时间和ip地址
+    @Override
+    public void modifytime(String addr, Integer id) {
+        systeMapper.modifytime(addr,id);
     }
 
 

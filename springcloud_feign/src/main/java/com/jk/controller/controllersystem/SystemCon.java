@@ -9,13 +9,13 @@
  */
 package com.jk.controller.controllersystem;
 
-import com.jk.model.systemmodel.IntegralprotocolBean;
-import com.jk.model.systemmodel.MemberBean;
-import com.jk.model.systemmodel.Systemodel;
-import com.jk.model.systemmodel.UserrsdBean;
+import com.jk.model.systemmodel.*;
 import com.jk.service.systemservice.SystemService;
 import com.jk.utils.EasyuiPage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -23,8 +23,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 〈一句话功能简述〉<br>
@@ -42,6 +45,9 @@ public class SystemCon {
 
     @Autowired
     private RedisTemplate redisTemplate;
+
+    @Autowired
+    private MongoTemplate mongoTemplate;
 
 
 
@@ -138,14 +144,7 @@ public class SystemCon {
             return false;
         }
     }
-    @RequestMapping("aaa")
-    @ResponseBody
-    public String getRemortIP(HttpServletRequest request) {
-        if (request.getHeader("x-forwarded-for") == null) {
-            return request.getRemoteAddr();
-        }
-        return request.getHeader("x-forwarded-for");
-    }
+
 
     /**
      * 网站管理员查询
@@ -195,7 +194,9 @@ public class SystemCon {
     @ResponseBody
     public String deleteuserrs(Integer id){
 
-        return systemService.deleteuserrs(id);
+        UserrsdBean userBean = (UserrsdBean) redisTemplate.opsForValue().get("userBean");
+        Integer userid = userBean.getId();
+        return systemService.deleteuserrs(id,userid);
     }
 
     /**
@@ -205,7 +206,7 @@ public class SystemCon {
      */
     @RequestMapping("backstagelogin")
     @ResponseBody
-    public HashMap<String, Object> login(UserrsdBean userrsdBean){
+    public HashMap<String, Object> login(UserrsdBean userrsdBean,HttpServletRequest request){
         HashMap<String, Object> result = new HashMap<>();
         //通过前天传过来的账号获取账号的信息
         UserrsdBean userInfo = systemService.findUserInfoByAccount(userrsdBean.getUsername());
@@ -221,12 +222,50 @@ public class SystemCon {
             result.put("msg", "账号或密码错误");
             return result;
         }
-        //将用户信息存入到session中
+        //获取登录IP地址
+        String addr=null;
+        if (request.getHeader("x-forwarded-for") == null) {
+            addr = request.getRemoteAddr();
+        }else {
+         addr = request.getHeader("x-forwarded-for");
+        }
+        //修改最后一次登录的时间和ip地址
+        Integer id = userInfo.getId();
+        systemService.modifytime(addr,id);
+        //将用户信息存入到redis共享
         String key="userBean";
         redisTemplate.opsForValue().set(key, userInfo);
+        redisTemplate.expire(key, 30, TimeUnit.MINUTES);
+        //以上步骤全部成功则返回成功
         result.put("code", 0);
         result.put("msg", "登录成功");
+        //添加登录日志（mongodb）
+        SimpleDateFormat   sdf = new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss");
+        JournalBean journalBean =new JournalBean();
+        journalBean.setLogid(userInfo.getId());
+        journalBean.setLogip(addr);
+        journalBean.setLogdata(sdf.format(new Date()));
+        journalBean.setOperater(userInfo.getUsername());
+        String  request_url=request.getServletPath();
+        journalBean.setLogurl(request_url);
+        mongoTemplate.save(journalBean,"h_journal");
         return result;
+    }
+
+    /**
+     * 日志查询
+     * @param id
+     * @return
+     */
+    @RequestMapping("queryJournalid")
+    @ResponseBody
+    public List<JournalBean> queryJournalid (Integer id){
+
+        Query query =new Query();
+        query.addCriteria(Criteria.where("logid").in(id));
+        List<JournalBean> findlist = mongoTemplate.find(query, JournalBean.class);
+
+        return findlist;
     }
 
 

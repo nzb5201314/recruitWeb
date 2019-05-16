@@ -13,6 +13,7 @@ import com.jk.model.systemmodel.IntegralprotocolBean;
 import com.jk.model.systemmodel.MemberBean;
 import com.jk.model.systemmodel.Systemodel;
 import com.jk.model.systemmodel.UserrsdBean;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
@@ -82,11 +83,19 @@ public interface SysteMapper {
     //修改后端用户
     @Update("UPDATE qs_admin SET password=#{password} WHERE id=#{id}")
     void undatapassword(String password, Integer id);
-    //查询权限
-    @Select("SELECT role_id FROM qs_admin  WHERE id=#{id}")
-    void queryroleid(Integer id);
+    //查询自己的权限
+    @Select("SELECT role_id FROM qs_admin  WHERE id=#{userid}")
+    Integer queryroleid(Integer userid);
     //通过前天传过来的账号获取账号的信息
     @Select("select * from qs_admin  where  username = #{username}")
     UserrsdBean findUserInfoByAccount(String username);
+    //修改最后一次登录的时间和ip地址
+    @Update("UPDATE qs_admin SET add_time = SYSDATE(),last_login_ip=#{addr} WHERE id=#{id}")
+    void modifytime(String addr,Integer id);
+    //查询别人的权限
+    @Select("SELECT role_id FROM qs_admin WHERE id=#{id}")
+    Integer queryroleidothe(Integer id);
+    @Delete("DELETE FROM qs_admin WHERE id=#{id}")
+    void deleteuserrs(Integer id);
 }
 
