@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jk.mapper.notice.RecritMapper">
+   <!-- <sql id="rectwhere">
+          <where>
+              <if test="pageBean.addtime != null and pageBean.addtime != -1">
+
+
+                  <if test="pageBean.addtime ==1">
+                      and o.startTime &lt;=sysdate() and o.startTime >=adddate(sysdate(),-3)
+                  </if>
+                  <if test="pageBean.addtime ==2">
+                      and o.startTime &lt;=sysdate() and o.startTime >=adddate(sysdate(),-7)
+                  </if>
+                  <if test="pageBean.addtime ==3">
+                      and o.payment_time &lt;=sysdate() and o.startTime >=adddate(sysdate(),-30)
+                  </if>
+                  <if test="pageBean.addtime ==4">
+                      and o.startTime &lt;=sysdate() and o.startTime >=adddate(sysdate(),-183)
+                  </if>
+                  <if test="pageBean.addtime ==5">
+                      and o.startTime &lt;=sysdate() and o.startTime >=adddate(sysdate(),-365)
+                  </if>
+
+
+              </if>
+          </where>
+    </sql>-->
+      <select id="queryRecrtCount" parameterType="com.jk.model.liangh.PageBean" resultType="int">
+        SELECT COUNT(1) FROM qs_notice
+
+      </select>
+     <select id="queryRecrtpage" resultType="com.jk.model.liangh.PageBean" >
+
+                 SELECT
+           qn.id,
+            qn.title,
+            qnc.categoryname,
+            qn.is_display,
+            qn.click,
+            qn.addtime,
+            qn.content,
+             qn.seo_description,
+             qn.seo_keywords,
+            qn.tit_color,
+              qn.is_url,
+            qn.sort
+        FROM
+            qs_notice qn
+        LEFT JOIN qs_notice_category qnc ON qn.sort = qnc.sort
+
+                 limit #{start},#{rows}
+     </select>
+    <select id="findRecrtentList" resultType="com.jk.model.liangh.notice.NoticeBean">
+
+         SELECT
+            qn.id,
+            qn.title,
+            qnc.categoryname,
+            qn.is_display,
+            qn.click,
+            qn.addtime,
+            qn.content,
+             qn.seo_description,
+             qn.seo_keywords,
+            qn.tit_color,
+            qn.is_url,
+             qn.sort
+        FROM
+            qs_notice qn
+        LEFT JOIN qs_notice_category qnc ON qn.sort = qnc.sort
+
+    </select>
+    <select id="findRecrtentById" resultType="com.jk.model.liangh.notice.NoticeBean" parameterType="int">
+
+         SELECT
+            qn.id,
+            qn.title,
+            qnc.categoryname,
+            qn.is_display,
+            qn.click,
+            qn.addtime,
+            qn.content,
+             qn.seo_description,
+             qn.seo_keywords,
+            qn.tit_color,
+            qn.is_url,
+             qn.sort
+        FROM
+            qs_notice qn
+        LEFT JOIN qs_notice_category qnc ON qn.sort = qnc.sort
+         where qn.id=#{id}
+    </select>
+
+    <update id="updateRect" parameterType="com.jk.model.liangh.notice.NoticeBean">
+            UPDATE qs_notice
+                SET
+                title = #{title},
+                sort = #{sort},
+                is_display = #{is_display},
+                content = #{content},
+                seo_description = #{seo_description},
+                seo_keywords = #{seo_keywords},
+                addtime = #{addtime}
+                WHERE
+            id = #{id}
+
+    </update>
+    <insert id="addRect" parameterType="com.jk.model.liangh.notice.NoticeBean">
+
+INSERT INTO qs_notice (
+	id,
+	title,
+	tit_color,
+	sort,
+	content,
+	is_url,
+	seo_keywords,
+	seo_description
+)
+VALUES
+	(
+		#{title},#{tit_color},#{sort},#{content},#{is_url},#{seo_keywords},#{seo_description})
+    </insert>
+
+    <delete id="delRectById" parameterType="int">
+        delete from  qs_notice where id in
+        <foreach collection="array" index="index" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+</mapper>
